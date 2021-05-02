@@ -42,7 +42,9 @@
     "jwtSecretKey": "ZTBmOTY5MmY4YThlNjcxMzI2MDhhNDI0NmQ1ZjQ3MjE4YTFmZjkxZWZlNDdkZDliZmM0YTQ4OGVmOGYwMTgwMzQ0NzJmMzE2MTg1OGRkODM5YmNjNzU5NTQyZDc4ZTc2NDAzYzJmNjhhYzJmODE5ZmY0YmQ5OGZhYjQ4OTQ0MzM=",
     "clientTheme": "none",
     "clientThemeVariant": "",
-    "reactive": false
+    "reactive": false,
+    "entities": ["Message", "Stat"],
+    "lastLiquibaseTimestamp": 1619948335000
   },
   "git-provider": "GitHub",
   "git-company": "fgeneste",

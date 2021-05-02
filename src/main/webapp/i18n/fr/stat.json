@@ -1,0 +1,26 @@
+{
+  "gmailStatsApp": {
+    "stat": {
+      "home": {
+        "title": "Stats",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Stat",
+        "createOrEditLabel": "Créer ou éditer un Stat",
+        "notFound": "Aucun Stat trouvé"
+      },
+      "created": "Un nouveau Stat a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Stat avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Stat avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Stat {{ id }} ?"
+      },
+      "detail": {
+        "title": "Stat"
+      },
+      "id": "ID",
+      "from": "From",
+      "number": "Number",
+      "lastupdated": "Lastupdated"
+    }
+  }
+}
