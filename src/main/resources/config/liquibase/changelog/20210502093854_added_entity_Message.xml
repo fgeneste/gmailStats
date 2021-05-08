@@ -17,10 +17,10 @@
             <column name="jhi_from" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="object" type="varchar(255)">
+            <column name="object" type="varchar">
                 <constraints nullable="true" />
             </column>
-            <column name="corps" type="varchar(255)">
+            <column name="corps" type="varchar">
                 <constraints nullable="true" />
             </column>
             <column name="date" type="${datetimeType}">

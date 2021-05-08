@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.mail.*;
@@ -33,15 +35,19 @@ public class GmailService {
         this.messageRepository = messageRepository;
     }
 
-    public GmailService() {
-    }
+    /*public GmailService() {
+    }*/
 
     public void resetMessageInDatabase(){
         messageRepository.deleteAll();
     }
 
     public void saveMessageInBase(fr.geneste.domain.Message message){
-        messageRepository.save(message);
+        List<fr.geneste.domain.Message> mlist = messageRepository.findByDateAndAndFrom(message.getDate(), message.getFrom());
+        if(mlist==null || mlist.size()==0)
+            messageRepository.save(message);
+        else
+            System.out.println("Message déja présent en base ");
     }
 
     public boolean isLoggedIn() {

@@ -4,7 +4,7 @@ import Vue from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import App from './app.vue';
 import Vue2Filters from 'vue2-filters';
-import { ToastPlugin } from 'bootstrap-vue';
+import { ToastPlugin, ButtonPlugin } from 'bootstrap-vue';
 import router from './router';
 import * as config from './shared/config/config';
 import * as bootstrapVueConfig from './shared/config/config-bootstrap-vue';
@@ -20,6 +20,7 @@ import RegisterService from './account/register/register.service';
 import UserManagementService from '@/admin/user-management/user-management.service';
 import LoginService from './account/login.service';
 import AccountService from './account/account.service';
+import FgenesteService from './admin/fgeneste/fgeneste.service';
 
 import '../content/scss/vendor.scss';
 import TranslationService from '@/locale/translation.service';
@@ -38,6 +39,7 @@ config.initFortAwesome(Vue);
 bootstrapVueConfig.initBootstrapVue(Vue);
 Vue.use(Vue2Filters);
 Vue.use(ToastPlugin);
+Vue.use(ButtonPlugin);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('jhi-item-count', JhiItemCountComponent);
 Vue.component('jhi-sort-indicator', JhiSortIndicatorComponent);
@@ -91,6 +93,7 @@ new Vue({
     statService: () => new StatService(),
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
     accountService: () => accountService,
+    fgenesteService: () => new FgenesteService(),
   },
   i18n,
   store,
