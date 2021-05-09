@@ -1,17 +1,26 @@
 entity Message {
+	account String,
     from String,
     object String,
     corps String,
-    date Instant
+    date Instant,
+    stillOnServer Boolean
 }
 
-entity Stat {
-	from String,
-    number Integer,
-    lastupdated Instant
+entity Attachement {
+	file Blob
+}
+
+entity Conf {
+	key String,
+    value Integer
+}
+
+relationship OneToMany {
+  Message{attachement} to Attachement{message}
 }
 // Set pagination options
-//paginate JobHistory, Employee with infinite-scroll
+paginate Message, Stat with infinite-scroll
 //paginate Job with pagination
 
 // Use Data Transfer Objects (DTO)
