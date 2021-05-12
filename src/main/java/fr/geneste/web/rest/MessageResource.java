@@ -213,7 +213,8 @@ public class MessageResource {
     @GetMapping("/messagescountofvoids/{account}")
     public ResponseEntity<String> getMessagesCountOfVoids(@PathVariable String account) {
         log.debug("REST request to get a page of Messages");
-        String res = messageRepository.findCountOfVoids(account);
-        return ResponseEntity.ok(res);
+        String voids = messageRepository.findCountOfVoids(account);
+        String total = messageRepository.findCount(account);
+        return ResponseEntity.ok(voids + "," + total);
     }
 }

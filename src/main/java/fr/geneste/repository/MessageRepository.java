@@ -26,4 +26,9 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
         value = "SELECT count(*) FROM MESSAGE WHERE account=?1 and (corps is null OR corps='')",
         nativeQuery = true)
     String findCountOfVoids(String account);
+
+    @Query(
+        value = "SELECT count(*) FROM MESSAGE WHERE account=?1 ",
+        nativeQuery = true)
+    String findCount(String account);
 }

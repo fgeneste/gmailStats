@@ -16,10 +16,42 @@ export default class Fgeneste extends Vue {
   private timer = null;
   private displayBar = false;
   private displayPie = false;
+  private displayPie2 = false;
   private myConfig:any = null;
+  private myConfig4Void:any = null;
 
   mounted() {
     this.myConfig = {
+      type: 'pie',
+      title:{
+        text:"A Pie Chart"
+      },
+      plot: {
+        tooltip: {
+          text: "%t",
+          'font-color': "white",
+          'font-family': "Georgia",
+          'font-size': 20,
+          'font-weight': "bold",
+          'font-style': "normal"
+        }
+      },
+      series: [
+        {
+          values: [43],
+          text: 'TOTO'
+        },
+        {
+          values: [27],
+          text: 'TOTI'
+        },
+        {
+          values: [30],
+          text: 'TOTA'
+        }]
+    }
+
+    this.myConfig4Void = {
       type: 'pie',
       plot: {
         tooltip: {
@@ -85,21 +117,33 @@ export default class Fgeneste extends Vue {
   }
 
   public onClick(compte){
-    //console.log(compte);
+    this.displayPie = false;
+    this.displayPie2 = false;
     this.fgenesteService().countByFrom(compte).then(value => {
       let conf:string = JSON.stringify(value.data);
-      let label = /"label"/gi;
-      let val = /"val"/gi;
+      let label = /label/gi;
+      let val = /val/gi;
       conf = conf.replace(label,'text').replace(val, 'values');
       let doublequote = /""/gi;
       let quote = /"/gi;
-      conf = conf.replace(doublequote,"''").replace(quote,"'");
-      console.log(conf);
+      //conf = conf.replace(doublequote,"''").replace(quote,"'");
+      //console.log(conf);
       this.myConfig.series = JSON.parse(conf);
-      console.log(this.myConfig);
+      let titre = '"title":{"text":"'+compte+'"}';
+      this.myConfig.title.text = compte;
+      //console.log(this.myConfig);
       this.displayPie = true;
     });
-    this.fgenesteService().countVoids(compte).then(value => {console.log(value)});
+    this.fgenesteService().countVoids(compte).then(value =>
+    {
+      console.log(value);
+      let array = value.data.split(',');
+      let nonvides = parseInt(array[1])-parseInt(array[0]);
+      let series = '[{"values": ['+ array[0] + '],"text": "vide"},{"values": ['+ nonvides +'],"text": "non vide"}]';
+      console.log(series);
+      this.myConfig4Void.series = JSON.parse(series);
+      this.displayPie2 = true;
+    });
   }
 
   public hasAnyAuthority(authorities: any): boolean {

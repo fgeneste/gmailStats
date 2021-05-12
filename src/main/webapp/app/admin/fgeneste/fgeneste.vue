@@ -20,6 +20,7 @@
           </b-dropdown>
 
           <zingchart v-if="displayPie" :data="myConfig" :height="300" :width="600"/>
+          <zingchart v-if="displayPie2" :data="myConfig4Void" :height="300" :width="600"/>
         </div>
     </div>
 </template>
