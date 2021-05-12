@@ -18,10 +18,13 @@
         "title": "Message"
       },
       "id": "ID",
+      "account": "Account",
       "from": "From",
       "object": "Object",
       "corps": "Corps",
-      "date": "Date"
+      "date": "Date",
+      "stillOnServer": "Still On Server",
+      "attachement": "Attachement"
     }
   }
 }

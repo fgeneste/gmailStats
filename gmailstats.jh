@@ -1,10 +1,10 @@
 entity Message {
 	account String,
-    from String,
-    object String,
-    corps String,
-    date Instant,
-    stillOnServer Boolean
+  from String,
+  object String,
+  corps String,
+  date Instant,
+  stillOnServer Boolean
 }
 
 entity Attachement {
@@ -13,14 +13,14 @@ entity Attachement {
 
 entity Conf {
 	key String,
-    value Integer
+  value String
 }
 
 relationship OneToMany {
   Message{attachement} to Attachement{message}
 }
 // Set pagination options
-paginate Message, Stat with infinite-scroll
+paginate Message with infinite-scroll
 //paginate Job with pagination
 
 // Use Data Transfer Objects (DTO)

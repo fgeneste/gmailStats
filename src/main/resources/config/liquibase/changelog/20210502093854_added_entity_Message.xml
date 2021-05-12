@@ -14,6 +14,9 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="account" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="jhi_from" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -24,6 +27,9 @@
                 <constraints nullable="true" />
             </column>
             <column name="date" type="${datetimeType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="still_on_server" type="boolean">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -47,10 +53,12 @@
                   separator=";"
                   tableName="message">
             <column name="id" type="numeric"/>
+            <column name="account" type="string"/>
             <column name="jhi_from" type="string"/>
             <column name="object" type="string"/>
             <column name="corps" type="string"/>
             <column name="date" type="${datetimeType}"/>
+            <column name="still_on_server" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

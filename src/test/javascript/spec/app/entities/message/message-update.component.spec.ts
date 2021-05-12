@@ -11,6 +11,8 @@ import MessageUpdateComponent from '@/entities/message/message-update.vue';
 import MessageClass from '@/entities/message/message-update.component';
 import MessageService from '@/entities/message/message.service';
 
+import AttachementService from '@/entities/attachement/attachement.service';
+
 const localVue = createLocalVue();
 
 config.initVueApp(localVue);
@@ -40,6 +42,8 @@ describe('Component Tests', () => {
         router,
         provide: {
           messageService: () => messageServiceStub,
+
+          attachementService: () => new AttachementService(),
         },
       });
       comp = wrapper.vm;

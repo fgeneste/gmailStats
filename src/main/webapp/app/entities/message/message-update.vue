@@ -15,6 +15,18 @@
             <input type="text" class="form-control" id="id" name="id" v-model="message.id" readonly />
           </div>
           <div class="form-group">
+            <label class="form-control-label" v-text="$t('gmailStatsApp.message.account')" for="message-account">Account</label>
+            <input
+              type="text"
+              class="form-control"
+              name="account"
+              id="message-account"
+              data-cy="account"
+              :class="{ valid: !$v.message.account.$invalid, invalid: $v.message.account.$invalid }"
+              v-model="$v.message.account.$model"
+            />
+          </div>
+          <div class="form-group">
             <label class="form-control-label" v-text="$t('gmailStatsApp.message.from')" for="message-from">From</label>
             <input
               type="text"
@@ -64,6 +76,20 @@
                 @change="updateInstantField('date', $event)"
               />
             </div>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" v-text="$t('gmailStatsApp.message.stillOnServer')" for="message-stillOnServer"
+              >Still On Server</label
+            >
+            <input
+              type="checkbox"
+              class="form-check"
+              name="stillOnServer"
+              id="message-stillOnServer"
+              data-cy="stillOnServer"
+              :class="{ valid: !$v.message.stillOnServer.$invalid, invalid: $v.message.stillOnServer.$invalid }"
+              v-model="$v.message.stillOnServer.$model"
+            />
           </div>
         </div>
         <div>

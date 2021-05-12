@@ -14,6 +14,18 @@ const Stat = () => import('@/entities/stat/stat.vue');
 const StatUpdate = () => import('@/entities/stat/stat-update.vue');
 // prettier-ignore
 const StatDetails = () => import('@/entities/stat/stat-details.vue');
+// prettier-ignore
+const Attachement = () => import('@/entities/attachement/attachement.vue');
+// prettier-ignore
+const AttachementUpdate = () => import('@/entities/attachement/attachement-update.vue');
+// prettier-ignore
+const AttachementDetails = () => import('@/entities/attachement/attachement-details.vue');
+// prettier-ignore
+const Conf = () => import('@/entities/conf/conf.vue');
+// prettier-ignore
+const ConfUpdate = () => import('@/entities/conf/conf-update.vue');
+// prettier-ignore
+const ConfDetails = () => import('@/entities/conf/conf-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default [
@@ -63,6 +75,54 @@ export default [
     path: '/stat/:statId/view',
     name: 'StatView',
     component: StatDetails,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/attachement',
+    name: 'Attachement',
+    component: Attachement,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/attachement/new',
+    name: 'AttachementCreate',
+    component: AttachementUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/attachement/:attachementId/edit',
+    name: 'AttachementEdit',
+    component: AttachementUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/attachement/:attachementId/view',
+    name: 'AttachementView',
+    component: AttachementDetails,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/conf',
+    name: 'Conf',
+    component: Conf,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/conf/new',
+    name: 'ConfCreate',
+    component: ConfUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/conf/:confId/edit',
+    name: 'ConfEdit',
+    component: ConfUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/conf/:confId/view',
+    name: 'ConfView',
+    component: ConfDetails,
     meta: { authorities: [Authority.USER] },
   },
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here

@@ -3,15 +3,20 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import dayjs from 'dayjs';
 import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
 
+import AttachementService from '@/entities/attachement/attachement.service';
+import { IAttachement } from '@/shared/model/attachement.model';
+
 import { IMessage, Message } from '@/shared/model/message.model';
 import MessageService from './message.service';
 
 const validations: any = {
   message: {
+    account: {},
     from: {},
     object: {},
     corps: {},
     date: {},
+    stillOnServer: {},
   },
 };
 
@@ -21,6 +26,10 @@ const validations: any = {
 export default class MessageUpdate extends Vue {
   @Inject('messageService') private messageService: () => MessageService;
   public message: IMessage = new Message();
+
+  @Inject('attachementService') private attachementService: () => AttachementService;
+
+  public attachements: IAttachement[] = [];
   public isSaving = false;
   public currentLanguage = '';
 
@@ -29,6 +38,7 @@ export default class MessageUpdate extends Vue {
       if (to.params.messageId) {
         vm.retrieveMessage(to.params.messageId);
       }
+      vm.initRelationships();
     });
   }
 
@@ -113,5 +123,11 @@ export default class MessageUpdate extends Vue {
     this.$router.go(-1);
   }
 
-  public initRelationships(): void {}
+  public initRelationships(): void {
+    this.attachementService()
+      .retrieve()
+      .then(res => {
+        this.attachements = res.data;
+      });
+  }
 }

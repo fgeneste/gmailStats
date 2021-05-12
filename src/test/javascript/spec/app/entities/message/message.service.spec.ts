@@ -33,7 +33,7 @@ describe('Service Tests', () => {
     beforeEach(() => {
       service = new MessageService();
       currentDate = new Date();
-      elemDefault = new Message(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', currentDate);
+      elemDefault = new Message(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', currentDate, false);
     });
 
     describe('Service methods', () => {
@@ -96,10 +96,12 @@ describe('Service Tests', () => {
       it('should update a Message', async () => {
         const returnedFromService = Object.assign(
           {
+            account: 'BBBBBB',
             from: 'BBBBBB',
             object: 'BBBBBB',
             corps: 'BBBBBB',
             date: dayjs(currentDate).format(DATE_TIME_FORMAT),
+            stillOnServer: true,
           },
           elemDefault
         );
@@ -131,7 +133,7 @@ describe('Service Tests', () => {
       it('should partial update a Message', async () => {
         const patchObject = Object.assign(
           {
-            object: 'BBBBBB',
+            from: 'BBBBBB',
           },
           new Message()
         );
@@ -164,10 +166,12 @@ describe('Service Tests', () => {
       it('should return a list of Message', async () => {
         const returnedFromService = Object.assign(
           {
+            account: 'BBBBBB',
             from: 'BBBBBB',
             object: 'BBBBBB',
             corps: 'BBBBBB',
             date: dayjs(currentDate).format(DATE_TIME_FORMAT),
+            stillOnServer: true,
           },
           elemDefault
         );
@@ -178,7 +182,7 @@ describe('Service Tests', () => {
           returnedFromService
         );
         axiosStub.get.resolves([returnedFromService]);
-        return service.retrieve().then(res => {
+        return service.retrieve({ sort: {}, page: 0, size: 10 }).then(res => {
           expect(res).toContainEqual(expected);
         });
       });

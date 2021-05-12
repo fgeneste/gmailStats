@@ -28,11 +28,34 @@
       <table class="table table-striped" aria-describedby="messages">
         <thead>
           <tr>
-            <th scope="row"><span v-text="$t('global.field.id')">ID</span></th>
-            <th scope="row"><span v-text="$t('gmailStatsApp.message.from')">From</span></th>
-            <th scope="row"><span v-text="$t('gmailStatsApp.message.object')">Object</span></th>
-            <th scope="row"><span v-text="$t('gmailStatsApp.message.corps')">Corps</span></th>
-            <th scope="row"><span v-text="$t('gmailStatsApp.message.date')">Date</span></th>
+            <th scope="row" v-on:click="changeOrder('id')">
+              <span v-text="$t('global.field.id')">ID</span>
+              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator>
+            </th>
+            <th scope="row" v-on:click="changeOrder('account')">
+              <span v-text="$t('gmailStatsApp.message.account')">Account</span>
+              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'account'"></jhi-sort-indicator>
+            </th>
+            <th scope="row" v-on:click="changeOrder('from')">
+              <span v-text="$t('gmailStatsApp.message.from')">From</span>
+              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'from'"></jhi-sort-indicator>
+            </th>
+            <th scope="row" v-on:click="changeOrder('object')">
+              <span v-text="$t('gmailStatsApp.message.object')">Object</span>
+              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'object'"></jhi-sort-indicator>
+            </th>
+            <th scope="row" v-on:click="changeOrder('corps')">
+              <span v-text="$t('gmailStatsApp.message.corps')">Corps</span>
+              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'corps'"></jhi-sort-indicator>
+            </th>
+            <th scope="row" v-on:click="changeOrder('date')">
+              <span v-text="$t('gmailStatsApp.message.date')">Date</span>
+              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'date'"></jhi-sort-indicator>
+            </th>
+            <th scope="row" v-on:click="changeOrder('stillOnServer')">
+              <span v-text="$t('gmailStatsApp.message.stillOnServer')">Still On Server</span>
+              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'stillOnServer'"></jhi-sort-indicator>
+            </th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -41,10 +64,12 @@
             <td>
               <router-link :to="{ name: 'MessageView', params: { messageId: message.id } }">{{ message.id }}</router-link>
             </td>
+            <td>{{ message.account }}</td>
             <td>{{ message.from }}</td>
             <td>{{ message.object }}</td>
             <td>{{ message.corps }}</td>
             <td>{{ message.date ? $d(Date.parse(message.date), 'short') : '' }}</td>
+            <td>{{ message.stillOnServer }}</td>
             <td class="text-right">
               <div class="btn-group">
                 <router-link :to="{ name: 'MessageView', params: { messageId: message.id } }" custom v-slot="{ navigate }">
@@ -73,6 +98,16 @@
             </td>
           </tr>
         </tbody>
+        <infinite-loading
+          ref="infiniteLoading"
+          v-if="totalItems > itemsPerPage"
+          :identifier="infiniteId"
+          slot="append"
+          @infinite="loadMore"
+          force-use-infinite-wrapper=".el-table__body-wrapper"
+          :distance="20"
+        >
+        </infinite-loading>
       </table>
     </div>
     <b-modal ref="removeEntity" id="removeEntity">

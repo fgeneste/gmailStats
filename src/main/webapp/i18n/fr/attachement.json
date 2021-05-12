@@ -1,0 +1,25 @@
+{
+  "gmailStatsApp": {
+    "attachement": {
+      "home": {
+        "title": "Attachements",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Attachement",
+        "createOrEditLabel": "Créer ou éditer un Attachement",
+        "notFound": "Aucun Attachement trouvé"
+      },
+      "created": "Un nouveau Attachement a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Attachement avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Attachement avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Attachement {{ id }} ?"
+      },
+      "detail": {
+        "title": "Attachement"
+      },
+      "id": "ID",
+      "file": "File",
+      "message": "Message"
+    }
+  }
+}

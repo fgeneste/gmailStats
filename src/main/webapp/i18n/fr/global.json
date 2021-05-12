@@ -9,6 +9,8 @@
         "main": "Entités",
         "message": "Message",
         "stat": "Stat",
+        "attachement": "Attachement",
+        "conf": "Conf",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

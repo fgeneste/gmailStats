@@ -31,6 +31,9 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class MessageResourceIT {
 
+    private static final String DEFAULT_ACCOUNT = "AAAAAAAAAA";
+    private static final String UPDATED_ACCOUNT = "BBBBBBBBBB";
+
     private static final String DEFAULT_FROM = "AAAAAAAAAA";
     private static final String UPDATED_FROM = "BBBBBBBBBB";
 
@@ -42,6 +45,9 @@ class MessageResourceIT {
 
     private static final Instant DEFAULT_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
+    private static final Boolean DEFAULT_STILL_ON_SERVER = false;
+    private static final Boolean UPDATED_STILL_ON_SERVER = true;
 
     private static final String ENTITY_API_URL = "/api/messages";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -67,7 +73,13 @@ class MessageResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Message createEntity(EntityManager em) {
-        Message message = new Message().from(DEFAULT_FROM).object(DEFAULT_OBJECT).corps(DEFAULT_CORPS).date(DEFAULT_DATE);
+        Message message = new Message()
+            .account(DEFAULT_ACCOUNT)
+            .from(DEFAULT_FROM)
+            .object(DEFAULT_OBJECT)
+            .corps(DEFAULT_CORPS)
+            .date(DEFAULT_DATE)
+            .stillOnServer(DEFAULT_STILL_ON_SERVER);
         return message;
     }
 
@@ -78,7 +90,13 @@ class MessageResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Message createUpdatedEntity(EntityManager em) {
-        Message message = new Message().from(UPDATED_FROM).object(UPDATED_OBJECT).corps(UPDATED_CORPS).date(UPDATED_DATE);
+        Message message = new Message()
+            .account(UPDATED_ACCOUNT)
+            .from(UPDATED_FROM)
+            .object(UPDATED_OBJECT)
+            .corps(UPDATED_CORPS)
+            .date(UPDATED_DATE)
+            .stillOnServer(UPDATED_STILL_ON_SERVER);
         return message;
     }
 
@@ -100,10 +118,12 @@ class MessageResourceIT {
         List<Message> messageList = messageRepository.findAll();
         assertThat(messageList).hasSize(databaseSizeBeforeCreate + 1);
         Message testMessage = messageList.get(messageList.size() - 1);
+        assertThat(testMessage.getAccount()).isEqualTo(DEFAULT_ACCOUNT);
         assertThat(testMessage.getFrom()).isEqualTo(DEFAULT_FROM);
         assertThat(testMessage.getObject()).isEqualTo(DEFAULT_OBJECT);
         assertThat(testMessage.getCorps()).isEqualTo(DEFAULT_CORPS);
         assertThat(testMessage.getDate()).isEqualTo(DEFAULT_DATE);
+        assertThat(testMessage.getStillOnServer()).isEqualTo(DEFAULT_STILL_ON_SERVER);
     }
 
     @Test
@@ -136,10 +156,12 @@ class MessageResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(message.getId().intValue())))
+            .andExpect(jsonPath("$.[*].account").value(hasItem(DEFAULT_ACCOUNT)))
             .andExpect(jsonPath("$.[*].from").value(hasItem(DEFAULT_FROM)))
             .andExpect(jsonPath("$.[*].object").value(hasItem(DEFAULT_OBJECT)))
             .andExpect(jsonPath("$.[*].corps").value(hasItem(DEFAULT_CORPS)))
-            .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())));
+            .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
+            .andExpect(jsonPath("$.[*].stillOnServer").value(hasItem(DEFAULT_STILL_ON_SERVER.booleanValue())));
     }
 
     @Test
@@ -154,10 +176,12 @@ class MessageResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(message.getId().intValue()))
+            .andExpect(jsonPath("$.account").value(DEFAULT_ACCOUNT))
             .andExpect(jsonPath("$.from").value(DEFAULT_FROM))
             .andExpect(jsonPath("$.object").value(DEFAULT_OBJECT))
             .andExpect(jsonPath("$.corps").value(DEFAULT_CORPS))
-            .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()));
+            .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()))
+            .andExpect(jsonPath("$.stillOnServer").value(DEFAULT_STILL_ON_SERVER.booleanValue()));
     }
 
     @Test
@@ -179,7 +203,13 @@ class MessageResourceIT {
         Message updatedMessage = messageRepository.findById(message.getId()).get();
         // Disconnect from session so that the updates on updatedMessage are not directly saved in db
         em.detach(updatedMessage);
-        updatedMessage.from(UPDATED_FROM).object(UPDATED_OBJECT).corps(UPDATED_CORPS).date(UPDATED_DATE);
+        updatedMessage
+            .account(UPDATED_ACCOUNT)
+            .from(UPDATED_FROM)
+            .object(UPDATED_OBJECT)
+            .corps(UPDATED_CORPS)
+            .date(UPDATED_DATE)
+            .stillOnServer(UPDATED_STILL_ON_SERVER);
 
         restMessageMockMvc
             .perform(
@@ -193,10 +223,12 @@ class MessageResourceIT {
         List<Message> messageList = messageRepository.findAll();
         assertThat(messageList).hasSize(databaseSizeBeforeUpdate);
         Message testMessage = messageList.get(messageList.size() - 1);
+        assertThat(testMessage.getAccount()).isEqualTo(UPDATED_ACCOUNT);
         assertThat(testMessage.getFrom()).isEqualTo(UPDATED_FROM);
         assertThat(testMessage.getObject()).isEqualTo(UPDATED_OBJECT);
         assertThat(testMessage.getCorps()).isEqualTo(UPDATED_CORPS);
         assertThat(testMessage.getDate()).isEqualTo(UPDATED_DATE);
+        assertThat(testMessage.getStillOnServer()).isEqualTo(UPDATED_STILL_ON_SERVER);
     }
 
     @Test
@@ -267,7 +299,7 @@ class MessageResourceIT {
         Message partialUpdatedMessage = new Message();
         partialUpdatedMessage.setId(message.getId());
 
-        partialUpdatedMessage.object(UPDATED_OBJECT);
+        partialUpdatedMessage.from(UPDATED_FROM);
 
         restMessageMockMvc
             .perform(
@@ -281,10 +313,12 @@ class MessageResourceIT {
         List<Message> messageList = messageRepository.findAll();
         assertThat(messageList).hasSize(databaseSizeBeforeUpdate);
         Message testMessage = messageList.get(messageList.size() - 1);
-        assertThat(testMessage.getFrom()).isEqualTo(DEFAULT_FROM);
-        assertThat(testMessage.getObject()).isEqualTo(UPDATED_OBJECT);
+        assertThat(testMessage.getAccount()).isEqualTo(DEFAULT_ACCOUNT);
+        assertThat(testMessage.getFrom()).isEqualTo(UPDATED_FROM);
+        assertThat(testMessage.getObject()).isEqualTo(DEFAULT_OBJECT);
         assertThat(testMessage.getCorps()).isEqualTo(DEFAULT_CORPS);
         assertThat(testMessage.getDate()).isEqualTo(DEFAULT_DATE);
+        assertThat(testMessage.getStillOnServer()).isEqualTo(DEFAULT_STILL_ON_SERVER);
     }
 
     @Test
@@ -299,7 +333,13 @@ class MessageResourceIT {
         Message partialUpdatedMessage = new Message();
         partialUpdatedMessage.setId(message.getId());
 
-        partialUpdatedMessage.from(UPDATED_FROM).object(UPDATED_OBJECT).corps(UPDATED_CORPS).date(UPDATED_DATE);
+        partialUpdatedMessage
+            .account(UPDATED_ACCOUNT)
+            .from(UPDATED_FROM)
+            .object(UPDATED_OBJECT)
+            .corps(UPDATED_CORPS)
+            .date(UPDATED_DATE)
+            .stillOnServer(UPDATED_STILL_ON_SERVER);
 
         restMessageMockMvc
             .perform(
@@ -313,10 +353,12 @@ class MessageResourceIT {
         List<Message> messageList = messageRepository.findAll();
         assertThat(messageList).hasSize(databaseSizeBeforeUpdate);
         Message testMessage = messageList.get(messageList.size() - 1);
+        assertThat(testMessage.getAccount()).isEqualTo(UPDATED_ACCOUNT);
         assertThat(testMessage.getFrom()).isEqualTo(UPDATED_FROM);
         assertThat(testMessage.getObject()).isEqualTo(UPDATED_OBJECT);
         assertThat(testMessage.getCorps()).isEqualTo(UPDATED_CORPS);
         assertThat(testMessage.getDate()).isEqualTo(UPDATED_DATE);
+        assertThat(testMessage.getStillOnServer()).isEqualTo(UPDATED_STILL_ON_SERVER);
     }
 
     @Test

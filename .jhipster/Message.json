@@ -2,6 +2,10 @@
   "name": "Message",
   "fields": [
     {
+      "fieldName": "account",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "from",
       "fieldType": "String"
     },
@@ -16,12 +20,23 @@
     {
       "fieldName": "date",
       "fieldType": "Instant"
+    },
+    {
+      "fieldName": "stillOnServer",
+      "fieldType": "Boolean"
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "attachement",
+      "otherEntityRelationshipName": "message",
+      "relationshipName": "attachement"
+    }
+  ],
   "entityTableName": "message",
   "dto": "no",
-  "pagination": "no",
+  "pagination": "infinite-scroll",
   "service": "no",
   "jpaMetamodelFiltering": false,
   "fluentMethods": true,

@@ -43,8 +43,8 @@
     "clientTheme": "none",
     "clientThemeVariant": "",
     "reactive": false,
-    "entities": ["Message", "Stat"],
-    "lastLiquibaseTimestamp": 1619948335000
+    "entities": ["Message", "Stat", "Attachement", "Conf"],
+    "lastLiquibaseTimestamp": 1620633019000
   },
   "git-provider": "GitHub",
   "git-company": "fgeneste",

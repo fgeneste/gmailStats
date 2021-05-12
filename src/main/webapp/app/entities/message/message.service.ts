@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import buildPaginationQueryOpts from '@/shared/sort/sorts';
+
 import { IMessage } from '@/shared/model/message.model';
 
 const baseApiUrl = 'api/messages';
@@ -18,10 +20,10 @@ export default class MessageService {
     });
   }
 
-  public retrieve(): Promise<any> {
+  public retrieve(paginationQuery?: any): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios
-        .get(baseApiUrl)
+        .get(baseApiUrl + `?${buildPaginationQueryOpts(paginationQuery)}`)
         .then(res => {
           resolve(res);
         })

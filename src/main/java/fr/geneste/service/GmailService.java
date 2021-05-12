@@ -1,5 +1,8 @@
 package fr.geneste.service;
 
+import fr.geneste.domain.Attachement;
+import fr.geneste.repository.AttachementRepository;
+import fr.geneste.repository.ConfRepository;
 import fr.geneste.repository.MessageRepository;
 import fr.geneste.repository.UserRepository;
 import org.slf4j.Logger;
@@ -13,6 +16,7 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.mail.*;
+import javax.mail.search.FlagTerm;
 
 @Service
 @Transactional
@@ -21,6 +25,8 @@ public class GmailService {
     private final Logger log = LoggerFactory.getLogger(GmailService.class);
 
     private MessageRepository messageRepository;
+    private ConfRepository confRepository;
+    private AttachementRepository attachementRepository;
 
     private Session session;
     private Store store;
@@ -31,8 +37,14 @@ public class GmailService {
     private String protocol = "imaps";
     private String file = "INBOX";
 
-    public GmailService(MessageRepository messageRepository) {
+    public GmailService(
+        MessageRepository messageRepository,
+        ConfRepository confRepository,
+        AttachementRepository attachementRepository) {
+
         this.messageRepository = messageRepository;
+        this.confRepository = confRepository;
+        this.attachementRepository = attachementRepository;
     }
 
     /*public GmailService() {
@@ -40,14 +52,27 @@ public class GmailService {
 
     public void resetMessageInDatabase(){
         messageRepository.deleteAll();
+        attachementRepository.deleteAll();
+        //confRepository.deleteAll();
+    }
+
+    public String getAccount(){
+        return confRepository.findByKey("account").getValue();
+    }
+
+    public String getPassword(){
+        return confRepository.findByKey("password").getValue();
     }
 
     public void saveMessageInBase(fr.geneste.domain.Message message){
         List<fr.geneste.domain.Message> mlist = messageRepository.findByDateAndAndFrom(message.getDate(), message.getFrom());
-        if(mlist==null || mlist.size()==0)
-            messageRepository.save(message);
-        else
+        if(mlist!=null && mlist.size()>0) {
+            message = mlist.get(0);
+            message.setStillOnServer(true);
             System.out.println("Message déja présent en base ");
+        }
+
+        messageRepository.save(message);
     }
 
     public boolean isLoggedIn() {
@@ -101,10 +126,14 @@ public class GmailService {
         return folder.getMessages();
     }
 
+    public Message[] getNewMessages() throws MessagingException {
+        return folder.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
+    }
+
     public String getFromToString(Address[] addresses){
         String add = new String();
         for( Address addresse : addresses ) {
-            if(addresse.toString().contains("<")){
+            if(addresse.toString().contains("<") && addresse.toString().contains(">")){
                 int indexFrom = addresse.toString().indexOf("<")+1;
                 int indexTo = addresse.toString().indexOf(">");
                 add += addresse.toString().substring(indexFrom, indexTo) + ";";
@@ -112,6 +141,9 @@ public class GmailService {
             else
                 add += addresse + ";";
         }
-        return add.substring(0, add.lastIndexOf(";"));
+        if(add.lastIndexOf(";")>-1)
+            return add.substring(0, add.lastIndexOf(";"));
+
+        return add;
     }
 }

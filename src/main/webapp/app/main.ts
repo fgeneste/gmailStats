@@ -4,7 +4,7 @@ import Vue from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import App from './app.vue';
 import Vue2Filters from 'vue2-filters';
-import { ToastPlugin, ButtonPlugin } from 'bootstrap-vue';
+import { ToastPlugin, ButtonPlugin, ProgressPlugin, DropdownPlugin } from 'bootstrap-vue';
 import router from './router';
 import * as config from './shared/config/config';
 import * as bootstrapVueConfig from './shared/config/config-bootstrap-vue';
@@ -22,6 +22,9 @@ import LoginService from './account/login.service';
 import AccountService from './account/account.service';
 import FgenesteService from './admin/fgeneste/fgeneste.service';
 
+import 'zingchart/es6';
+import zingchartVue from 'zingchart-vue';
+
 import '../content/scss/vendor.scss';
 import TranslationService from '@/locale/translation.service';
 
@@ -30,6 +33,7 @@ import UserOAuth2Service from '@/entities/user/user.oauth2.service';
 
 import MessageService from '@/entities/message/message.service';
 import StatService from '@/entities/stat/stat.service';
+import ConfService from "@/entities/conf/conf.service";
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 /* tslint:enable */
@@ -40,10 +44,13 @@ bootstrapVueConfig.initBootstrapVue(Vue);
 Vue.use(Vue2Filters);
 Vue.use(ToastPlugin);
 Vue.use(ButtonPlugin);
+Vue.use(ProgressPlugin);
+Vue.use(DropdownPlugin);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('jhi-item-count', JhiItemCountComponent);
 Vue.component('jhi-sort-indicator', JhiSortIndicatorComponent);
 Vue.component('infinite-loading', InfiniteLoading);
+Vue.component('zingchart', zingchartVue);
 const i18n = config.initI18N(Vue);
 const store = config.initVueXStore(Vue);
 
@@ -94,6 +101,7 @@ new Vue({
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
     accountService: () => accountService,
     fgenesteService: () => new FgenesteService(),
+    confService: () => new ConfService(),
   },
   i18n,
   store,

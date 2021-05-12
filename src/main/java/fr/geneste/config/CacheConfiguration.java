@@ -50,6 +50,9 @@ public class CacheConfiguration {
             createCache(cm, fr.geneste.domain.User.class.getName() + ".authorities");
             createCache(cm, fr.geneste.domain.Message.class.getName());
             createCache(cm, fr.geneste.domain.Stat.class.getName());
+            createCache(cm, fr.geneste.domain.Message.class.getName() + ".attachements");
+            createCache(cm, fr.geneste.domain.Attachement.class.getName());
+            createCache(cm, fr.geneste.domain.Conf.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

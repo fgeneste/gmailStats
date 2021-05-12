@@ -1,0 +1,28 @@
+{
+  "name": "Attachement",
+  "fields": [
+    {
+      "fieldName": "file",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "message",
+      "otherEntityRelationshipName": "attachement",
+      "relationshipName": "message"
+    }
+  ],
+  "entityTableName": "attachement",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210510075018"
+}

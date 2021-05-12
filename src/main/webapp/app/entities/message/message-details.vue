@@ -7,6 +7,12 @@
         </h2>
         <dl class="row jh-entity-details">
           <dt>
+            <span v-text="$t('gmailStatsApp.message.account')">Account</span>
+          </dt>
+          <dd>
+            <span>{{ message.account }}</span>
+          </dd>
+          <dt>
             <span v-text="$t('gmailStatsApp.message.from')">From</span>
           </dt>
           <dd>
@@ -29,6 +35,12 @@
           </dt>
           <dd>
             <span v-if="message.date">{{ $d(Date.parse(message.date), 'long') }}</span>
+          </dd>
+          <dt>
+            <span v-text="$t('gmailStatsApp.message.stillOnServer')">Still On Server</span>
+          </dt>
+          <dd>
+            <span>{{ message.stillOnServer }}</span>
           </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

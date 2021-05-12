@@ -33,9 +33,9 @@
             <font-awesome-icon icon="asterisk" />
             <span v-text="$t('global.menu.entities.message')">Message</span>
           </b-dropdown-item>
-          <b-dropdown-item to="/stat">
+          <b-dropdown-item to="/conf">
             <font-awesome-icon icon="asterisk" />
-            <span v-text="$t('global.menu.entities.stat')">Stat</span>
+            <span v-text="$t('global.menu.entities.conf')">Conf</span>
           </b-dropdown-item>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
         </b-nav-item-dropdown>
@@ -53,7 +53,7 @@
             <span class="no-bold" v-text="$t('global.menu.admin.main')">Administration</span>
           </span>
           <b-dropdown-item to="/admin/fgeneste" active-class="active">
-            <font-awesome-icon icon="user-tie" />
+            <font-awesome-icon icon="mail-bulk" />
             <span v-text="$t('global.menu.admin.fgeneste')">Admin Mail</span>
           </b-dropdown-item>
           <b-dropdown-item to="/admin/user-management" active-class="active">

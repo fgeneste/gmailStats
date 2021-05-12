@@ -1,0 +1,25 @@
+{
+  "gmailStatsApp": {
+    "conf": {
+      "home": {
+        "title": "Confs",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Conf",
+        "createOrEditLabel": "Créer ou éditer un Conf",
+        "notFound": "Aucun Conf trouvé"
+      },
+      "created": "Un nouveau Conf a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Conf avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Conf avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Conf {{ id }} ?"
+      },
+      "detail": {
+        "title": "Conf"
+      },
+      "id": "ID",
+      "key": "Key",
+      "value": "Value"
+    }
+  }
+}
