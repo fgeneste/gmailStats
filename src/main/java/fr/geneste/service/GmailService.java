@@ -60,6 +60,10 @@ public class GmailService {
         return confRepository.findByKey("account").getValue();
     }
 
+    public String getHost(){
+        return confRepository.findByKey("host").getValue();
+    }
+
     public String getPassword(){
         return confRepository.findByKey("password").getValue();
     }

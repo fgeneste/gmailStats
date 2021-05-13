@@ -19,6 +19,7 @@ export default class Fgeneste extends Vue {
   private displayPie2 = false;
   private myConfig:any = null;
   private myConfig4Void:any = null;
+  private datastore:any = null;
 
   mounted() {
     this.myConfig = {
@@ -121,6 +122,7 @@ export default class Fgeneste extends Vue {
     this.displayPie2 = false;
     this.fgenesteService().countByFrom(compte).then(value => {
       let conf:string = JSON.stringify(value.data);
+      this.datastore = conf;
       let label = /label/gi;
       let val = /val/gi;
       conf = conf.replace(label,'text').replace(val, 'values');

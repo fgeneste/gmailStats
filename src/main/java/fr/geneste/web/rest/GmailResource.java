@@ -57,7 +57,7 @@ public class GmailResource {
     @GetMapping("/get-mails")
     public String getMails() throws Exception {
         stop=false;
-        gmailService.login("imap.gmail.com", gmailService.getAccount(),
+        gmailService.login(gmailService.getHost(), gmailService.getAccount(),
             gmailService.getPassword());
         int messageCount = gmailService.getMessageCount();
 
@@ -65,7 +65,7 @@ public class GmailResource {
         //messageCount = 50;
             totalmessages = messageCount;
         Message[] messages = gmailService.getMessages();
-        for (int i = 0; i < messageCount && !stop; i++) {
+        for (int i = 7600; i < messageCount && !stop; i++) {
             System.out.println(i+1 + "/" + messageCount);
             current = i+1;
             fr.geneste.domain.Message m = new fr.geneste.domain.Message();
