@@ -57,14 +57,65 @@ public class GmailResource {
     @GetMapping("/get-mails")
     public String getMails() throws Exception {
         stop=false;
+
+        String[] accounts=gmailService.getConf("accounts").split(",");
+        /*for(int i=0; i<accounts.length; i++){
+            Vector<String> keys = getAccountKeys(accounts[i]);
+            System.out.println("Account : " + keys.get(0));
+            System.out.println("Host : " + keys.get(1));
+            System.out.println("Password : " + keys.get(2));
+            getMailsOfAccount(keys.get(0), keys.get(1), keys.get(2));
+        }*/
+
         gmailService.login(gmailService.getHost(), gmailService.getAccount(),
             gmailService.getPassword());
         int messageCount = gmailService.getMessageCount();
 
+        totalmessages = messageCount;
+        Message[] messages = gmailService.getMessages();
+
+        //Message[] messages = gmailService.getMessagesSinceLastDate();
+        gmailService.setLastDate();
+        for (int i = 0; i < messageCount && !stop; i++) {
+            System.out.println(i+1 + "/" + messageCount);
+
+            current = i+1;
+            Message me = messages[i];
+            if(!me.getFolder().isOpen()){
+                gmailService.login(gmailService.getHost(), gmailService.getAccount(),
+                    gmailService.getPassword());
+                messages = gmailService.getMessages();
+                me = messages[i];
+            }
+            fr.geneste.domain.Message m = new fr.geneste.domain.Message();
+            m.setAccount(gmailService.getAccount());
+            String subject = "";
+            if (me.getSubject() != null)
+                subject = me.getSubject();
+            Address[] fromAddress = me.getFrom();
+
+            m.setDate(me.getReceivedDate().toInstant());
+            m.setCorps(getTextFromMessage(me));
+            m.setFrom(gmailService.getFromToString(fromAddress));
+            m.setObject(me.getSubject());
+            /*HashSet<Attachement> attachements = getFileFromMessage(messages[i], m);
+            if(attachements!=null && !attachements.isEmpty())
+                m.setAttachements(attachements);*/
+            gmailService.saveMessageInBase(m);
+        }
+        return String.valueOf(messageCount);
+    }
+
+    private void getMailsOfAccount(String account, String host, String password) throws Exception {
+        gmailService.login(account, host, password);
+        int messageCount = gmailService.getMessageCount();
+
         //just for tutorial purpose
         //messageCount = 50;
-            totalmessages = messageCount;
-        Message[] messages = gmailService.getMessages();
+        totalmessages = messageCount;
+        //Message[] messages = gmailService.getMessages();
+        Message[] messages = gmailService.getMessagesSinceLastDate();
+        gmailService.setLastDate();
         for (int i = 7600; i < messageCount && !stop; i++) {
             System.out.println(i+1 + "/" + messageCount);
             current = i+1;
@@ -85,7 +136,52 @@ public class GmailResource {
             gmailService.saveMessageInBase(m);
         }
         gmailService.logout();
-        return String.valueOf(messageCount);
+    }
+
+    private boolean isAlive() throws Exception {
+        /*if(gmailService.session==null) {
+            System.err.println("###########################################################################");
+            System.err.println("LA SESSION EST NULL");
+            System.err.println("###########################################################################");
+            gmailService.login(gmailService.getHost(), gmailService.getAccount(),
+                gmailService.getPassword());
+            return false;
+        }*/
+        if(!gmailService.store.isConnected()) {
+            System.err.println("###########################################################################");
+            System.err.println("LE STORE EST DECO");
+            System.err.println("###########################################################################");
+            gmailService.store.connect();
+            return false;
+        }
+        if(!gmailService.folder.isOpen()) {
+            System.err.println("###########################################################################");
+            System.err.println("LA FOLDER EST CLOSED");
+            System.err.println("###########################################################################");
+            gmailService.folder.open(Folder.READ_ONLY);
+            return false;
+        }
+        return  true;
+    }
+
+    private Vector<String> getAccountKeys(String account){
+        Vector<String> keys = new Vector<String>();
+        keys.add(account);
+        if(account.equals("frankouille")){
+            keys.add(gmailService.getConf("host_gmail"));
+            keys.add(gmailService.getConf("password_frankouille"));
+        }
+        else {
+            if(account.contains("yahoo")){
+                keys.add(gmailService.getConf("host_yahoo"));
+                keys.add(gmailService.getConf("password_fgth"));
+            }
+            else {
+                keys.add(gmailService.getConf("host_gmail"));
+                keys.add(gmailService.getConf("password_gmail"));
+            }
+        }
+        return keys;
     }
 
     @GetMapping("/get-fetched-mails")
@@ -105,7 +201,7 @@ public class GmailResource {
         return String.valueOf(current);
     }
 
-    private String getTextFromMessage(Message message) throws MessagingException, IOException {
+    private String getTextFromMessage(Message message) throws MessagingException, IOException, FolderClosedException {
         String result = "";
         if (message.isMimeType("text/plain")) {
             result = message.getContent().toString();

@@ -1,6 +1,7 @@
 package fr.geneste.service;
 
 import fr.geneste.domain.Attachement;
+import fr.geneste.domain.Conf;
 import fr.geneste.repository.AttachementRepository;
 import fr.geneste.repository.ConfRepository;
 import fr.geneste.repository.MessageRepository;
@@ -11,12 +12,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
 import javax.mail.*;
+import javax.mail.search.ComparisonTerm;
 import javax.mail.search.FlagTerm;
+import javax.mail.search.ReceivedDateTerm;
+import javax.mail.search.SearchTerm;
 
 @Service
 @Transactional
@@ -28,9 +35,9 @@ public class GmailService {
     private ConfRepository confRepository;
     private AttachementRepository attachementRepository;
 
-    private Session session;
-    private Store store;
-    private Folder folder;
+    public Session session;
+    public Store store;
+    public Folder folder;
 
     // hardcoding protocol and the folder
     // it can be parameterized and enhanced as required
@@ -62,6 +69,26 @@ public class GmailService {
 
     public String getHost(){
         return confRepository.findByKey("host").getValue();
+    }
+
+    public String getConf(String key){
+        return confRepository.findByKey(key).getValue();
+    }
+
+    public void setLastDate(){
+        SimpleDateFormat sdf = new SimpleDateFormat("ddMMYYYY");
+        Conf c = confRepository.findByKey("lastdate");
+        if (c==null)
+            c = new Conf();
+        c.setKey("lastdate");
+        c.setValue(sdf.format(new Date()));
+        confRepository.save(c);
+    }
+
+    public Date getLastDate() throws ParseException {
+        String lastdate =  confRepository.findByKey("lastdate").getValue();
+        SimpleDateFormat sdf = new SimpleDateFormat("ddMMYYYY");
+        return sdf.parse(lastdate);
     }
 
     public String getPassword(){
@@ -103,7 +130,7 @@ public class GmailService {
         store.connect();
         folder = store.getFolder(url);
 
-        folder.open(Folder.READ_WRITE);
+        folder.open(Folder.READ_ONLY);
     }
 
     /**
@@ -132,6 +159,16 @@ public class GmailService {
 
     public Message[] getNewMessages() throws MessagingException {
         return folder.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
+    }
+
+    public Message[] getMessagesSinceDate(Date somePastDate) throws MessagingException {
+        SearchTerm newerThan = new ReceivedDateTerm(ComparisonTerm.GT, somePastDate);
+        return folder.search(newerThan);
+    }
+
+    public Message[] getMessagesSinceLastDate() throws MessagingException, ParseException {
+        SearchTerm newerThan = new ReceivedDateTerm(ComparisonTerm.GT, getLastDate());
+        return folder.search(newerThan);
     }
 
     public String getFromToString(Address[] addresses){

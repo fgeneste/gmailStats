@@ -8,7 +8,7 @@ const JhiConfigurationComponent = () => import('@/admin/configuration/configurat
 const JhiHealthComponent = () => import('@/admin/health/health.vue');
 const JhiLogsComponent = () => import('@/admin/logs/logs.vue');
 const JhiMetricsComponent = () => import('@/admin/metrics/metrics.vue');
-const Fgeneste  = () => import('@/admin/fgeneste/fgeneste.vue');
+const Fgeneste = () => import('@/admin/fgeneste/fgeneste.vue');
 
 export default [
   {
@@ -16,7 +16,8 @@ export default [
     name: 'Fgeneste',
     component: Fgeneste,
     meta: { authorities: [Authority.ADMIN] },
-  },{
+  },
+  {
     path: '/admin/user-management',
     name: 'JhiUser',
     component: JhiUserManagementComponent,

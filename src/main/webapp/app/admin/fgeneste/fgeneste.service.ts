@@ -39,14 +39,13 @@ export default class FgenesteService {
 
   public countByFrom(account): Promise<any> {
     return new Promise(resolve => {
-      axios.get(`/api/messagescountbyfrom/`+account).then(res => resolve(res));
+      axios.get(`/api/messagescountbyfrom/` + account).then(res => resolve(res));
     });
   }
 
   public countVoids(account): Promise<any> {
     return new Promise(resolve => {
-      axios.get(`/api/messagescountofvoids/`+account).then(res => resolve(res));
+      axios.get(`/api/messagescountofvoids/` + account).then(res => resolve(res));
     });
   }
-
 }

@@ -33,9 +33,9 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/gmailStats
+    url: jdbc:postgresql://192.168.1.52:5234/gmailStats
     username: gmailStats
-    password:
+    password: gmailStats
     hikari:
       poolName: Hikari
       auto-commit: false

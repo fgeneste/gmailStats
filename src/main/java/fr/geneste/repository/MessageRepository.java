@@ -18,7 +18,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     List<Message> findByDateAndAndFrom(Instant date, String from);
 
     @Query(
-        value = "SELECT lower(jhi_from) as label, count(*) as val FROM MESSAGE WHERE account=?1 GROUP BY lower(jhi_from)",
+        value = "SELECT lower(jhi_from) as label, count(*) as val FROM MESSAGE WHERE account=?1 GROUP BY lower(jhi_from) ORDER BY val DESC",
         nativeQuery = true)
     List<Count> findCountByFrom(String account);
 
